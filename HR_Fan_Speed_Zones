@@ -1,0 +1,103 @@
+import ConfigParser
+
+def update_age(question):
+	cfg = ConfigParser.ConfigParser()
+	cfg.read('settings.cfg')
+	age = cfg.getint('Athlete', 'age')
+	
+	updAGE = None
+	print "Current Age is",age
+	updAGE = str(raw_input(question + " (y/n): ")).lower().strip()
+	try:
+		if updAGE == "y":
+			try:
+				age = int(raw_input("Enter new AGE: "))
+				cfg.set('Athlete', 'age',str(age))
+				with open('settings.cfg', 'w') as configfile:
+					cfg.write(configfile)
+				return age
+			except ValueError:
+				print("Age must be an integer")	
+		if updAGE == "n":
+			age = age
+			return age
+		else:
+			print("Age must be an integer")
+			return ask_user("Do you want to update your age?")
+			
+	except Exception as error:
+		print("Age must be an integer")
+		print(error)
+		return ask_user("Do you want to update your age?")
+
+def update_rhh(question):
+	cfg = ConfigParser.ConfigParser()
+	cfg.read('settings.cfg')
+	rhh = cfg.getint('Athlete', 'rhh')
+	
+	updRHH = None
+	print "Current Resting HR is",rhh
+	updRHH = str(raw_input(question + " (y/n): ")).lower().strip()
+	try:
+		if updRHH == "y":
+			try:
+				rhh = int(raw_input("Enter new Resting HR: "))
+				cfg.set('Athlete', 'rhh',str(rhh))
+				with open('settings.cfg', 'w') as configfile:
+					cfg.write(configfile)
+				return rhh
+			except ValueError:
+				print("Resting HR must be an integer")	
+		if updRHH == "n":
+			rhh = rhh
+			return rhh
+		else:
+			print("Resting HR must be an integer")
+			return ask_user("Do you want to update your Resting HR?")
+			
+	except Exception as error:
+		print("Resting HR must be an integer")
+		print(error)
+		return ask_user("Do you want to update your Resting HR?")
+
+
+age = update_age("Do you want to update your Age? : ")
+rhh = update_rhh("Do you want to update your Resting HR? : ")
+
+maxhr = 220-age
+hrr = maxhr-rhh
+
+z1_start = int(round((hrr*0.5) + rhh))
+z1_end = int(round((hrr*0.60) + rhh))
+
+z2_start = int(round((hrr*0.60) + rhh))
+z2_end = int(round((hrr*0.70) + rhh))
+
+z3_start = int(round((hrr*0.70) + rhh))
+z3_end = int(round((hrr*0.80) + rhh))
+
+z4_start = int(round((hrr*0.80) + rhh))
+z4_end = int(round((hrr*0.90) + rhh))
+
+z5_start = int(round((hrr*0.90) + rhh))
+z5_end = int(round((hrr*1) + rhh))
+
+f1_start = z1_start-20
+f1_end = z1_end
+f2_start = z2_start
+f2_end = z3_end
+f3_start = z4_start
+
+print "Maximum HR is :",maxhr,"at 220 minus age"
+print "Resting HR is :",rhh
+print "HR Reserve is :",hrr
+
+print "Zone 1 is :",z1_start,"to",z1_end
+print "Zone 2 is :",z2_start,"to",z2_end
+print "Zone 3 is :",z3_start,"to",z3_end
+print "Zone 4 is :",z4_start,"to",z4_end
+print "Zone 5 is :",z5_start,"to",z5_end
+
+print "Fan 1 and GREEN LED will start at HR",f1_start,"and end at",f1_end
+print "Fan 2 and YELLOW LED will start at HR",f2_start,"and end at",f2_end
+print "Fan 3 and RED LED will start at HR",f3_start
